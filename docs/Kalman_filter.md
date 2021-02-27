@@ -12,3 +12,31 @@ X<sub>t</sub> | Z<sub>t</sub> ~ N(CZ<sub>t</sub> + D, R)，另外，初始状态
 
 综上：线性动态系统的参数为***θ*** = (A, B, C, D, Q, R, μ<sub>1</sub>, Σ<sub>1</sub>)
 
+## 二、解决的问题
+### 2.1 Inference问题
+[README.md]4.2节的Inference问题中，线性动态系统要解决的就是filtering问题，即求P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>)。
+由Bayes公式和动态模型的假设可得:
+
+P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) ∝ P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>)P(X<sub>t</sub>|Z<sub>t</sub>) (1)
+
+其中求P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>)是一个prediction问题，且满足:
+
+P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>) = ∫ P(Z<sub>t-1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>)P(Z<sub>t</sub>|Z<sub>t-1</sub>)dZ<sub>t-1</sub> (2)
+
+### 2.2 求解线性动态系统模型的步骤
+
+根据2.1节的公式(1)和(2)，线性动态系统模型分为预测(prediction)和更新(update)两步:
+
+step 1. 预测(prediction)
+
+P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>) = ∫ P(Z<sub>t-1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>)P(Z<sub>t</sub>|Z<sub>t-1</sub>)dZ<sub>t-1</sub> 
+
+代入高斯分布假设得：
+
+N()
+
+step 2. 更新(update)
+
+
+
+
