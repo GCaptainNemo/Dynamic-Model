@@ -70,9 +70,9 @@ N(x|μ*, Σ*) = N(x|μ1, Σ1) * N(x|μ2, Σ2)
 参数关系如下:
 
 μ* =  (Σ2<sup>-1</sup> + Σ1<sup>-1</sup>)<sup>-1</sup>
-</sup>(Σ1<sup>-1</sup> * μ1 + Σ2<sup>-1</sup> * μ2)
+</sup>(Σ1<sup>-1</sup> * μ1 + Σ2<sup>-1</sup> * μ2) = μ1 + Σ1(Σ1 + Σ2)<sup>-1</sup>(μ2 - μ1)
 
-Σ* =  (Σ2<sup>-1</sup> + Σ1<sup>-1</sup>)<sup>-1</sup>
+Σ* =  (Σ2<sup>-1</sup> + Σ1<sup>-1</sup>)<sup>-1</sup> = Σ1 - Σ1(Σ1 + Σ2)<sup>-1</sup>Σ1
 
 更新步即两个高斯分布相，但要注意的是需要统一量纲：
 
@@ -81,12 +81,31 @@ N(X<sub>t</sub> | CZ<sub>t</sub>, R)
 
 综上，更新步的参数更新规则为：
 
-μ<sub>t|t</sub> = μ<sub>t|t-1</sub>
+
+(1) 计算Kalman增益
  
-Σ<sub>t|t</sub> = (Σ<sub>t|t-1</sub><sup>-1</sup> + C<sup>T</sup>R<sup>-1</sup>C)<sup>-1</sup>
+K<sub>t</sub> = Σ<sub>t|t-1</sub> * C<sup>T</sup> * (R + C * Σ<sub>t|t-1</sub> * C<sup>T</sup>)<sup>-1</sup>
 
+(2) 更新方差矩阵
 
+Σ<sub>t|t</sub> = (Σ<sub>t|t-1</sub><sup>-1</sup> + C<sup>T</sup>R<sup>-1</sup>C)<sup>-1</sup> = Σ<sub>t|t-1</sub> - K<sub>t</sub> * C * Σ<sub>t|t-1</sub>
 
+(3) 更新均值向量
 
+μ<sub>t|t</sub> = μ<sub>t|t-1</sub> + K<sub>t</sub>(X<sub>t</sub> - C*μ<sub>t|t-1</sub>)
+ 
+
+## 三、效果
+参考资料[1]中给的估计小车一维运动速度和时间的例子：
+
+![kalman filter](../results/linear_dynamic_system/kalman_filter.png)
+
+## 四、总结
+Kalman filter的初始参数Q,R,Z0,SIGMA0都会对最终滤波后的效果产生影响，其中Q,R的影响对滤波效果的影响较大，往往需要调参。如果状态转移矩阵的准确度较高，则设置较小的Q矩阵；如果观测矩阵的准确度较高，则设置较小的R矩阵。
+
+## 五、参考资料
+[1] Faragher R . Understanding the Basis of the Kalman Filter Via a Simple and Intuitive Derivation [Lecture Notes][J]. IEEE Signal Processing Magazine, 2012, 29(5):128-132.
+
+[2] Machine Learning: A Probabilistic Perspective (第四章)
 
 
