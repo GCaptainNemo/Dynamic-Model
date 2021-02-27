@@ -47,7 +47,7 @@ P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) ∝ P(Z<sub>t<
 N(Z<sub>t</sub> | μ<sub>t|t</sub>, Σ<sub>t|t</sub>) ∝ N(Z<sub>t</sub> | μ<sub>t|t-1</sub>, Σ<sub>t|t-1</sub>) * 
 N(X<sub>t</sub> | CZ<sub>t</sub>, R) 
 
-### 2.3 线性动态系统的闭式解
+### 2.3 线性动态系统参数更新闭式解
 
 由于多元高斯的联合、边缘、条件分布都是高斯分布，因此参数的更新有闭式解，对应如下：
 
@@ -61,7 +61,7 @@ N(X<sub>t</sub> | CZ<sub>t</sub>, R)
 
 (2) Σ<sub>t|t-1</sub> = A * Σ<sub>t-1|t-1</sub> * A<sup>T</sup> + Q
 
-***step 2. 更新(prediction)***
+***step 2. 更新(update)***
 
 对于相同量纲的两个高斯分布的乘积
 
@@ -74,7 +74,7 @@ N(x|μ*, Σ*) = N(x|μ1, Σ1) * N(x|μ2, Σ2)
 
 Σ* =  (Σ2<sup>-1</sup> + Σ1<sup>-1</sup>)<sup>-1</sup> = Σ1 - Σ1(Σ1 + Σ2)<sup>-1</sup>Σ1
 
-更新步即两个高斯分布相，但要注意的是需要统一量纲：
+更新步即两个高斯分布相乘，但要注意统一量纲
 
 N(X<sub>t</sub> | C * μ<sub>t|t</sub>, C * Σ<sub>t|t</sub> * C<sup>T</sup>) ∝ N(X<sub>t</sub> | C * μ<sub>t|t-1</sub>,  C * Σ<sub>t|t-1</sub>* C<sup>T</sup>) 
 N(X<sub>t</sub> | CZ<sub>t</sub>, R) 
@@ -90,7 +90,7 @@ K<sub>t</sub> = Σ<sub>t|t-1</sub> * C<sup>T</sup> * (R + C * Σ<sub>t|t-1</sub>
 
 Σ<sub>t|t</sub> = (Σ<sub>t|t-1</sub><sup>-1</sup> + C<sup>T</sup>R<sup>-1</sup>C)<sup>-1</sup> = Σ<sub>t|t-1</sub> - K<sub>t</sub> * C * Σ<sub>t|t-1</sub>
 
-(3) 更新均值向量
+(3) 利用新的观测数据更新均值向量
 
 μ<sub>t|t</sub> = μ<sub>t|t-1</sub> + K<sub>t</sub>(X<sub>t</sub> - C*μ<sub>t|t-1</sub>)
  
