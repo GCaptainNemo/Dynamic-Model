@@ -15,7 +15,7 @@
 
 ![PGM](resources/DS_PGM.jfif)
 
-其中X<sub>i</sub>是观测变量，Z<sub>i</sub>称为系统状态变量，也是模型的隐变量。
+其中X<sub>i</sub>是观测变量，Z<sub>i</sub>称为系统状态变量，也是模型的隐变量，动态模型也被称为状态空间模型(State Space Model)。
 
 ## 二、比较
 
@@ -27,14 +27,14 @@
 ## 三、动态系统的假设
 动态模型有两个基本的假设
 ### 3.1 同质(齐次)马尔可夫假设
-所谓同质马尔可夫假设，即未来的状态只和现在的状态有关，与现在的观测和过去的状态和观测无关。表示成概率的形式即:
+在给定t时刻状态的情况下，t+1时刻的状态与t时刻之前的状态和观测无关。表示成概率的形式即:
 
-P(Z<sub>t+1</sub>|Z<sub>t</sub>) = P(Z<sub>t+1</sub>|Z<sub>t</sub>, Z<sub>t-1</sub>, ..., Z<sub>1</sub>, X<sub>t</sub>, X<sub>t-1</sub>, ..., X<sub>1</sub>)
+P(Z<sub>t+1</sub>|Z<sub>t</sub>) = P(Z<sub>t+1</sub>|Z<sub>t</sub>, Z<sub>t-1</sub>, ..., Z<sub>1</sub>, X<sub>t</sub>, ..., X<sub>1</sub>)
 
 ### 3.1.2 观测独立性假设
 
-t时刻的观测只和t时刻的状态有关，与之前时刻的状态和观测无关。
-P(X<sub>t</sub>|Z<sub>t</sub>) = P(X<sub>t</sub>|Z<sub>t</sub>, Z<sub>t-1</sub>, ..., Z<sub>1</sub>, X<sub>t</sub>, ..., X<sub>1</sub>)
+给定t时刻状态的情况下，t时刻的观测与t之前的状态和观测无关。
+P(X<sub>t</sub>|Z<sub>t</sub>) = P(X<sub>t</sub>|Z<sub>t</sub>, Z<sub>t-1</sub>, ..., Z<sub>1</sub>, X<sub>t-1</sub>, ..., X<sub>1</sub>)
 
 ## 四、动态模型问题
 ### 4.1 Learning问题
@@ -49,4 +49,4 @@ Inference问题本质上就是求关于隐变量的后验概率P(Z|X)，但由�
 4. Smoothing: 求 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>T</sub>) (offline)
 5. Prediction: 求 P(Z<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 或者 P(X<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 
 
-其中
+其中HMM关注Decoding问题，而Kalman filter和Particle filter更关注Filtering问题。
