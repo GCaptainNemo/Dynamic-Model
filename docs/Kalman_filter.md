@@ -5,7 +5,7 @@
 
 Z<sub>t</sub> = AZ<sub>t-1</sub> + B + ε &nbsp;&nbsp;&nbsp;&nbsp;(1)
 
-Z<sub>t</sub> = CX<sub>t</sub> + δ  &nbsp;&nbsp;&nbsp;&nbsp;(2)
+X<sub>t</sub> = CZ<sub>t</sub> + δ  &nbsp;&nbsp;&nbsp;&nbsp;(2)
 
 ε和δ代表噪声变量，且ε~ N(0, Q), δ~ N(0, R)。则Z<sub>t</sub> | Z<sub>t-1</sub>~N(AZ<sub>t-1</sub> + B, Q)，
 X<sub>t</sub> | Z<sub>t</sub> ~ N(CZ<sub>t</sub>, R)，另外，初始状态Z<sub>1</sub>~N(μ<sub>1</sub>, Σ<sub>1</sub>)。
@@ -14,7 +14,7 @@ X<sub>t</sub> | Z<sub>t</sub> ~ N(CZ<sub>t</sub>, R)，另外，初始状态Z<su
 因为可以给状态变量添加一个齐次坐标，这样做可以让推出的公式更简洁。
 
 ## 二、解决的问题
-### 2.1 Inference问题
+### 2.1 Filtering问题
 [README.md](../README.md)4.2节的Inference问题中，线性动态系统要解决的就是filtering问题，即求P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>)。
 由Bayes公式和动态模型的假设可得:
 
@@ -24,9 +24,11 @@ P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) ∝ P(Z<sub>t<
 
 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>) = ∫ P(Z<sub>t-1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>)P(Z<sub>t</sub>|Z<sub>t-1</sub>)dZ<sub>t-1</sub> &nbsp;&nbsp;&nbsp;&nbsp;(2)
 
-### 2.2 求解线性动态系统模型的步骤
 
-根据2.1节的公式(1)和(2)，线性动态系统模型分为预测(prediction)和更新(update)两步:
+
+### 2.2 求解Filtering问题递推形式
+
+根据2.1节的公式(1)和(2)，我们得到了一个求解Filtering问题的递推形式，分为预测(prediction)和更新(update)两步:
 
 ***step 1. 预测(prediction)***
 
@@ -47,7 +49,7 @@ P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) ∝ P(Z<sub>t<
 N(Z<sub>t</sub> | μ<sub>t|t</sub>, Σ<sub>t|t</sub>) ∝ N(Z<sub>t</sub> | μ<sub>t|t-1</sub>, Σ<sub>t|t-1</sub>) * 
 N(X<sub>t</sub> | CZ<sub>t</sub>, R) 
 
-### 2.3 线性动态系统参数更新闭式解
+### 2.3 参数更新闭式解
 
 由于多元高斯的联合、边缘、条件分布都是高斯分布，因此参数的更新有闭式解，对应如下：
 

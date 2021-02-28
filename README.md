@@ -49,3 +49,4 @@ Inference问题本质上就是求关于隐变量的后验概率P(Z|X)，但由�
 4. Smoothing: 求 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>T</sub>) (offline)
 5. Prediction: 求 P(Z<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 或者 P(X<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 
 
+其中
