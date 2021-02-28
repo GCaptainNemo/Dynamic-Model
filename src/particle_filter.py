@@ -48,26 +48,31 @@ class Particle_filter:
             self.hidden_data.append(z)
             self.observe_data.append(x)
 
-    def filter(self):
+    def filter(self, resampling=True):
         z_estimate = 0  # 初始状态估计值
         self.z_estimate_lst = [z_estimate]
         V = 1    # 初始协方差
         z_particles = z_estimate + np.random.normal(0, V, self.particle_num)
+        Particles_weights = np.array([1 / self.particle_num for _ in range(self.particle_num)])
         self.z_particles_lst = [z_particles]
         for i in range(1, len(self.observe_data)):
             # 从p(zt|zt-1)中采样
             z_particles_sampling = self.sampling(z_particles)
             x_particles_sampling = dt * z_particles_sampling ** 3
             # 计算权重
-            Particles_weights = self.cal_weights(self.observe_data[i], x_particles_sampling)
+            Particles_weights = self.cal_weights(self.observe_data[i], x_particles_sampling, Particles_weights)
 
             # 估计
             z_est, z_var_ssd = self.estimate(z_particles_sampling, Particles_weights)
             self.z_estimate_lst.append(z_est)
 
             # 重采样
-            z_particles, Particles_weights = self.simple_resample(z_particles_sampling, Particles_weights)
-            self.z_particles_lst.append(z_particles)
+            if resampling:
+                z_particles, Particles_weights = self.simple_resample(z_particles_sampling, Particles_weights)
+                self.z_particles_lst.append(z_particles)
+            else:
+                z_particles = z_particles_sampling
+                self.z_particles_lst.append(z_particles)
 
     def sampling(self, z_particles):
         """ 从p(zt|zt-1)中采样 """
@@ -75,11 +80,12 @@ class Particle_filter:
                                np.random.normal(0, variance_Q, self.particle_num)
         return z_particles_sampling
 
-    def cal_weights(self, observed_data, x_particles_sampling):
+    def cal_weights(self, observed_data, x_particles_sampling, old_par_weights):
         """ 计算p(xt|zt)w(t-1), 由于每次都进行重采样，w(t-1)是常数 """
         variance_R_guji = variance_R + 2
         Particles_weights = (1 / np.sqrt(2 * np.pi * variance_R_guji)) * np.exp(-(observed_data - x_particles_sampling) ** 2 /
                                                                            (2 * variance_R_guji))
+        Particles_weights = Particles_weights * old_par_weights
         Particles_weights /= np.sum(Particles_weights)
         return Particles_weights
 
@@ -101,5 +107,5 @@ class Particle_filter:
 if __name__ == "__main__":
     obj = Particle_filter(100)
     obj.make_data()
-    obj.filter()
+    obj.filter(resampling=False)
     obj.plot()

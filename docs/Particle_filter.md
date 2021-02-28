@@ -81,9 +81,15 @@ Z<sub>t</sub> = h(X<sub>t</sub>, u, δ)  &nbsp;&nbsp;&nbsp;&nbsp;(2)
 
 ## 三、效果
 
-参考资料[2]的例子，进行particle filter，结果如下所示：
+参考资料[2]的例子，进行particle filter(SIR)，结果如下所示：
 
 ![particle filter](../results/particle_filter/Particle_filter.png)
+
+在同样的条件下，每次迭代不进行重采样的结果为：
+
+![particle filter](../results/particle_filter/particle_filter_without_resampling.png)
+
+可以看到此时粒子的轨迹分成了两部分，而粒子的加权平均估计值在上面，说明出现了粒子退化问题。
 
 ## 四、参考资料
 
