@@ -1,6 +1,6 @@
 # Particle Filter
 ## 一、介绍
-[README.md](../README.md)中介绍了Particle Filter与其它两个模型之间的区别与联系，Particle Filter认为观测变量和状态变量可以是任意分布，
+[README.md](../README.md)中介绍了Particle Filter与其它两个模型之间的区别与联系，Particle Filter和Kalman Filter一样都是解决通过观测变量对系统状态变量进行估计的问题(滤波问题)。不同的是，Particle Filter观测变量和状态变量可以是任意分布，
 噪声可以是任意分布，且变量之间的关系可以是非线性的:
 
 
@@ -21,14 +21,23 @@ Z<sub>t</sub> = h(X<sub>t</sub>, u, δ)  &nbsp;&nbsp;&nbsp;&nbsp;(2)
 ![Monte Carlo Sampling](../resources/particle_filter/Monte_Carlo_sampling.jpg)
 
 ### 2.2 Inportance Sampling(IS)
+对于分布p(z)，要求期望E<sub>p(z)</sub>[f(z)]，重要性采样的方法是引入一个新的分布q(z)，对q(z)采样，做法如下：
 
 ![Importance_sampling](../resources/particle_filter/Importance_Sampling.jpg)
 
-其中每个采样样本f(x<sub>i</sub>)的权重P(x<sub>i</sub>)/P'(x<sub>i</sub>)，称为样本的重要性权重。对应的采样分布P'称为
-提议分布(proposal distribution)。需要注意的是，对于一般的分布P我们很难直接从中进行采样，而Importance Sampling让我们可以
-通过一个已知的分布P'进行采样。
+其中w<sup>i</sup> = p(z<sub>i</sub>)/q(x<sub>i</sub>)，称为样本的重要性权重。对应的采样分布q(z)称为提议分布(proposal distribution)。对于分布P可能很难直接从中进行采样，而Importance Sampling让我们可以
+通过一个简单的分布q进行采样。
+
+在滤波问题中，我们关心的是后验概率P(Z<sub>t</sub>|X<sub>1:t</sub>) = P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>)，权重就是：
+
+![particle_filter_weight](../resources/particle_filter/Importance_sampling_weight.png)
+
+
 
 ### 2.3 Sequential Importance Sampling (SIS)
+重要性采样的一个问题就是计算量过大，每一次要采样N次，对每个样本计算一次权重。我们希望权重可以有一个递推关系式来简化计算过程。
+#### 2.3.1 SIS介绍
+
 考虑一个高维空间，真实分布为p(X<sub>1:n</sub>)其中X<sub>1:n</sub>:=(X1， X2, ..., Xn)，提议分布为q(X<sub>1:n</sub>)，权重为w(X<sub>1:n</sub>)。
 考虑一个特殊的情景，即我们需要从1维到n维依次采样，有没有办法用上次的权重进行新权重的计算(权重之间的递推关系式)？
 
@@ -38,32 +47,45 @@ Z<sub>t</sub> = h(X<sub>t</sub>, u, δ)  &nbsp;&nbsp;&nbsp;&nbsp;(2)
 
 ![SIS](../resources/particle_filter/SIS_2.png)
 
-如果我们将1:n转换成1:t，赋予维度一个时序的意义，就可以用它来解决particle filter中的重要性权重计算更新问题。
+#### 2.3.2 SIS解决粒子滤波问题
+如果我们将1:n转换成1:t，赋予维度一个时序的意义，就可以用它来解决particle filter中的重要性权重计算更新问题。在Particle Filter中为了计算的简便，
+不直接用filtering 问题的后验概率P(Z<sub>t</sub>|X<sub>1:t</sub>)进行采样，而是用P(Z<sub>1:t</sub>|X<sub>1:t</sub>)，因为它们有如下关系：
 
+![SIS](../resources/particle_filter/SIS_3.png)
+
+对应Particle Filter的权重更新公式为：
+
+![SIS](../resources/particle_filter/SIS_4.png)
+
+#### 2.3.3 SIS提议分布的选取
+选择恰当的提议分布是除了重采样之外，解决粒子退化(particle degeneracy)问题的方法。一个常用的选择是：
+
+![SIS](../resources/particle_filter/SIS_5.png)
+
+此时，SIS的权重递推关系式可简化为：
+
+![SIS](../resources/particle_filter/SIS_6.png)
+
+此时采样和权重更新就有点类似做前向预测(prediction)和修正(update)。
 
 ### 2.4 Sampling Importance Resampling (SIR)
 传统粒子滤波使用SIS会引起粒子退化(particle degeneracy)，即随着迭代的进行，一些粒子归一化权重会趋于1，而很多粒子权重则趋于0。
 这样的分布列并不能很好地代表系统状态后验分布，因为如果某粒子的归一化权重很小，它就不太可能被抽到，不该存在有很多粒子的归一化权重趋于0的情况，
-因此以这个分布列的期望作为Filtering的估计是不准确的。
+因此以这些粒子的加权平均作为Filtering的估计是不准确的。
 
 重采样就是解决粒子退化的一种方法，具体来说就是以各个粒子的归一化权重作为分布列，从中采出N个样本，采出的所有样本权重均为1/N。这样相当于复制权重较大的粒子，
-抛弃权重较小的粒子，用新得到的粒子来拟合分布，这样的采样技术称为重要性重采样(SIR)
+抛弃权重较小的粒子，用新得到的粒子来拟合分布、进行状态估计。在SIS的基础上加上重采样和特定的提议分布就是重要性重采样(SIR)，算法流程如下：
+
+![SIR](../resources/particle_filter/SIR.png)
 
 
-## 二、解决的问题
-### 2.1 Filtering问题
-[README.md](../README.md)4.2节的Inference问题中，Particle filter要解决的就是Filtering问题，即求P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>)。
+## 三、效果
 
-### 2.2 求解Filtering问题递推形式
+参考资料[2]的例子，进行particle filter，结果如下所示：
 
-根据2.1节的公式(1)和(2)，我们得到了一个求解Filtering问题的递推形式，分为预测(prediction)和更新(update)两步:
+![particle filter](../results/particle_filter/Particle_filter.png)
 
-***step 1. 预测(prediction)***
+## 四、参考资料
 
-P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>) = ∫ P(Z<sub>t-1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>)P(Z<sub>t</sub>|Z<sub>t-1</sub>)dZ<sub>t-1</sub> 
-
-
-***step 2. 更新(update)***
-
-P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) ∝ P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t-1</sub>)P(X<sub>t</sub>|Z<sub>t</sub>) 
-
+1. [https://www.jianshu.com/p/14ca1713378b](https://www.jianshu.com/p/14ca1713378b)
+2. [https://zhuanlan.zhihu.com/p/135414835](https://zhuanlan.zhihu.com/p/135414835)

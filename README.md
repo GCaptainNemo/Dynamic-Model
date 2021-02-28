@@ -50,3 +50,6 @@ Inference问题本质上就是求关于隐变量的后验概率P(Z|X)，但由�
 5. Prediction: 求 P(Z<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 或者 P(X<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 
 
 其中HMM关注Decoding问题，而Kalman filter和Particle filter更关注Filtering问题。
+
+## 五、参考资料
+1. [https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
