@@ -11,7 +11,7 @@ HMM关注三个问题：
 
 ##### 1. Evaluation 
 
-求P(X|λ)，相应的算法为前向算法(Forward Algorithm)和后向算法(Backward Algorithm)。
+给定模型参数λ的情况下，求似然函数P(X|λ)，相应的算法为前向算法(Forward Algorithm)和后向算法(Backward Algorithm)。
 
 ---
 ##### 2. Learning
