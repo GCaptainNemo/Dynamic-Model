@@ -18,12 +18,6 @@
 其中X<sub>i</sub>是观测变量(X<sub>i</sub>之间不是独立同分布的)，Z<sub>i</sub>称为系统状态变量，也是模型的隐变量，因此动态模型也被称为状态空间模型(State Space Model)。
 
 ## 二、比较
-
-1. HMM模型的系统状态变量的取值是离散的，对于观测变量的取值离散或连续没有要求。
-2. 线性动态系统模型(Kalman filter)的状态变量和观测变量的取值都是连续的，而且状态变量和观测变量都服从高斯分布，状态Z<sub>t</sub>、Z<sub>t-1</sub>之间
-和状态与观测Z<sub>t</sub>、X<sub>t</sub>之间是一个线性关系(故又称为 Linear Gaussian Model)。
-3. Particle filter模型的状态变量和观测变量的取值都是连续的，但是不服从高斯分布(non Gaussian)且非线性(non-linear)。
----
 |            |       HMM|   Kalman Filter|      Particle Filter|
 |------      | ---------|----------------|---------------|
 |状态空间     |     离散  |      连续      | 连续|
@@ -32,6 +26,11 @@
 |P(X<sub>t</sub>&#124;Z<sub>t</sub>)   |  B(发射矩阵)|   N(CZ<sub>t-1</sub> , R)    |   g(Z<sub>t</sub>) |
 |P(Z<sub>1</sub>)|                π    | N(μ1, ∑1) |  f(Z<sub>1</sub>)|
 ---
+1. HMM模型的系统状态变量的取值是离散的，对于观测变量的取值离散或连续没有要求。
+2. 线性动态系统模型(Kalman filter)的状态变量和观测变量的取值都是连续的，而且状态变量和观测变量都服从高斯分布，状态Z<sub>t</sub>、Z<sub>t-1</sub>之间
+和状态与观测Z<sub>t</sub>、X<sub>t</sub>之间是一个线性关系(故又称为 Linear Gaussian Model)。
+3. Particle filter模型的状态变量和观测变量的取值都是连续的，但是不服从高斯分布(non Gaussian)且非线性(non-linear)。
+
 ## 三、动态系统的假设
 动态模型有两个基本的假设
 ### 3.1 同质(齐次)马尔可夫假设
@@ -57,16 +56,17 @@ Learning问题就是要估计出模型的参数。
 Inference问题本质上就是求关于隐变量的后验概率P(Z|X)，但由于动态系统的特殊性，Inference又可以细分成以下几类:
 
 1. Decoding: 求P(Z<sub>1</sub>, Z<sub>2</sub>, ... ,Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>)
-2. Probability of evidence: 求P(X|**θ**)
-3. Filtering: 求 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) (online)
-4. Smoothing: 求 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>T</sub>) (offline)
-5. Prediction: 求 P(Z<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 或者 P(X<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 
+2. Filtering: 求 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) (online)
+3. Smoothing: 求 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>T</sub>) (offline)
+4. Prediction: 求 P(Z<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 或者 P(X<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 
 
 其中HMM关注Decoding问题，而Kalman filter和Particle filter更关注Filtering问题。
 
 #### 4.2.2 求Inference问题的方法
-根据后验概率是否能写成解析形式，可以把推断分成精确性推断和近似推断。近似推断又可以分为确定性近似推断(比如变分推理)和随机近似推断(比如Monte Carlo采样)。
+根据后验概率是否能写成解析形式，可以把推断分成精确性推断和近似推断。近似推断又可以分为确定性近似推断(e.g., 变分推理)和随机近似推断(e.g., Monte Carlo采样)。
 
+### 4.3 Evaluation问题
+Evaluation问题即在给定参数**θ**的情况下求似然函数P(X|**θ**)。
 
 
 ## 五、参考资料
