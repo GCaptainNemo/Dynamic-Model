@@ -39,6 +39,7 @@ P(X<sub>t</sub>|Z<sub>t</sub>) = P(X<sub>t</sub>|Z<sub>t</sub>, Z<sub>t-1</sub>,
 ## 四、动态模型问题
 ### 4.1 Learning问题
 Learning问题就是要估计出模型的参数。
+yi
 
 ### 4.2 Inference问题
 Inference问题本质上就是求关于隐变量的后验概率P(Z|X)，但由于动态系统的特殊性，Inference又可以细分成以下几类:
