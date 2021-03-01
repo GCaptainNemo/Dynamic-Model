@@ -2,8 +2,7 @@
 
 ## 一、Extend Kalman Filter(EKF)介绍
 Kalman filter 处理的是线性高斯模型，Extend Kalman filter是利用 Kalman filter处理非线性模型的最直接的推广。
-其核心思想就是就用一阶Taylor展开线性逼近。由于这是一个迭代算法，而每次迭代步的时候去逼近F<sub>K</sub>和H<sub>K</sub> ,
-所以除了一些特殊情况，效果不会太差。EKF具体算法如下所示：
+其核心思想就是就用一阶Taylor去近似F<sub>K</sub>和H<sub>K</sub> ，EKF具体算法如下所示：
 
 ![EKF](../resources/EKF/EKF_algorithm.jpg)
 
