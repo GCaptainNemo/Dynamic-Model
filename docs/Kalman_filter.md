@@ -110,4 +110,7 @@ Kalman filter的初始参数Q,R,Z0,SIGMA0都会对最终滤波后的效果产生
 
 [2] Machine Learning: A Probabilistic Perspective (第四章)
 
-[3] [Website](https://blog.csdn.net/codesamer/article/details/81191487)
+[3] [https://blog.csdn.net/codesamer/article/details/81191487](https://blog.csdn.net/codesamer/article/details/81191487)
+
+## 六、补充
+1. [Extend Kalman Filter](../docs/EKF.md)

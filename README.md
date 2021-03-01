@@ -9,7 +9,7 @@
 
 1. HMM(Hidden Markov Model)
 2. [Linear Dynamic system (Kalman filter)](docs/Kalman_filter.md)
-3. Particle filter
+3. [Particle filter](docs/Particle_filter.md)
 
 这三种动态模型的概率图相同，如下图所示:
 
@@ -53,3 +53,4 @@ Inference问题本质上就是求关于隐变量的后验概率P(Z|X)，但由�
 
 ## 五、参考资料
 1. [https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
+
