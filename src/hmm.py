@@ -52,7 +52,7 @@ class hmm:
                     alpha_t = alpha_t_plus1.copy()
 
                 # 求似然分布
-                print(sum(alpha_t_plus1))
+                print("likelihood prob = ", sum(alpha_t_plus1))
                 return sum(alpha_t_plus1)
             else:
                 # 迭代
@@ -102,7 +102,7 @@ class hmm:
                 for i in range(state_num):
                     result += self.B[i][self.X[0]] * self.pi[i] * beta_t_plus1[i]
 
-                print("result = ", result)
+                print("likelihood prob = ", result)
                 return result
             else:
                 beta_lst = [beta_T]
@@ -174,10 +174,35 @@ class hmm:
         :param option: state的时候代表求解P(Zt+1|X1:t)，data的时候代表求解P(Xt+1|X1:t)
         :return:
         """
-
-        ...
-
-
+        alpha_lst = self.forward_algorithm(returnAlpha=True)
+        state_num = len(alpha_lst[0])
+        predict_state_lst = []
+        predict_prob_lst = []
+        for i in range(len(alpha_lst)):
+            predict_prob = []
+            for k in range(state_num):
+                sum_ = 0
+                for j in range(state_num):
+                    sum_ += (alpha_lst[i][j] * self.A[j][k])
+                predict_prob.append(sum_)
+            predict_state_lst.append(np.argmax(predict_prob))
+            predict_prob_lst.append(predict_prob)
+        if option == "state":
+            print("predict_state_lst = ", predict_state_lst)
+            return predict_state_lst
+        elif option == "data":
+            observe_dimension = len(self.B[0])
+            predict_data_lst = []
+            for i in range(len(predict_prob_lst)):
+                predict_prob = []
+                for k in range(observe_dimension):
+                    sum_ = 0
+                    for j in range(state_num):
+                        sum_ += (predict_prob_lst[i][j] * self.B[j][k])
+                    predict_prob.append(sum_)
+                predict_data_lst.append(np.argmax(predict_prob))
+            print("predict_data_lst = ", predict_data_lst)
+            return predict_data_lst
 
 if __name__ == "__main__":
     A = [[0.5, 0.2, 0.3], [0.3, 0.5, 0.2], [0.2, 0.3, 0.5]]
@@ -190,6 +215,8 @@ if __name__ == "__main__":
     obj.viterbi()
     obj.filtering()
     obj.smoothing()
+    obj.prediction(option="state")
+    obj.prediction(option="data")
 
 
 
