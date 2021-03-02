@@ -4,14 +4,15 @@
 而贝叶斯学派把模型参数也当成随机变量，非完全贝叶斯(non-full bayesian)对参数进行最大后验估计，本质上还是一类优化问题，因此也有的学者把非完全贝叶斯划入频率学派的范畴。
 而完全贝叶斯(full-bayesian)则把学习问题看成一个积分问题，用MCMC等数值积分算法进行参数估计。
 
-贝叶斯学派最大的成果就是概率图模型，包括贝叶斯网络(Bayesian network)和马尔科夫网络(Markov network)。而在概率图中加入时间序列，就是动态模型(Dynamic model)。
+贝叶斯学派最大的成果就是概率图模型，包括贝叶斯网络(Bayesian network)和马尔科夫网络(Markov network)。而在贝叶斯网络中加入时间序列，就是动态模型(Dynamic model)。
+动态模型是处理***序列化***数据的模型，比如声音、文本、DNA等。
 这里介绍三种动态模型，包括:
 
 1. [HMM(Hidden Markov Model)](docs/HMM.md)
 2. [Linear Dynamic system (Kalman filter)](docs/Kalman_filter.md)
 3. [Particle filter](docs/Particle_filter.md)
 
-这三种动态模型的概率图相同，如下图所示:
+这三种动态模型的贝叶斯网络相同，如下图所示:
 
 ![PGM](resources/DS_PGM.jfif)
 
@@ -23,7 +24,7 @@
 |状态空间     |     离散  |      连续      | 连续|
 |观测空间     |  连续或离散|      连续      |  连续|
 |P(Z<sub>t</sub>&#124;Z<sub>t-1</sub>)   |  A(转移矩阵)|   N(AZ<sub>t-1</sub> + B, Q)    |   f(Z<sub>t-1</sub>) |
-|P(X<sub>t</sub>&#124;Z<sub>t</sub>)   |  B(发射矩阵)|   N(CZ<sub>t-1</sub> , R)    |   g(Z<sub>t</sub>) |
+|P(X<sub>t</sub>&#124;Z<sub>t</sub>)   |  B(发射矩阵)或连续分布|   N(CZ<sub>t-1</sub> , R)    |   g(Z<sub>t</sub>) |
 |P(Z<sub>1</sub>)|                π    | N(μ1, ∑1) |  f(Z<sub>1</sub>)|
 ---
 1. HMM模型的系统状态变量的取值是离散的，对于观测变量的取值离散或连续没有要求。
@@ -43,6 +44,8 @@ P(Z<sub>t+1</sub>|Z<sub>t</sub>) = P(Z<sub>t+1</sub>|Z<sub>t</sub>, Z<sub>t-1</s
 |给定t时刻状态的情况下，t时刻的观测与t之前的状态和观测无关。
 P(X<sub>t</sub>|Z<sub>t</sub>) = P(X<sub>t</sub>|Z<sub>t</sub>, Z<sub>t-1</sub>, ..., Z<sub>1</sub>, X<sub>t-1</sub>, ..., X<sub>1</sub>)
 
+***注意：这两个假设完全可以从动态模型概率图的结构中推出，参考*** [d-seperation](https://zhuanlan.zhihu.com/p/41106670)
+
 ## 四、动态模型问题
 ### 4.1 Learning问题
 Learning问题就是要估计出模型的参数。
@@ -59,16 +62,18 @@ Inference问题本质上就是求关于隐变量的后验概率P(Z|X)，但由�
 2. Filtering: 求 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) (online)
 3. Smoothing: 求 P(Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>T</sub>) (offline)
 4. Prediction: 求 P(Z<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 或者 P(X<sub>t+1</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>) 
+5. Probability of evidence:在给定参数**θ**的情况下求似然函数P(X|**θ**)，该问题在HMM中也叫Evaluation问题。
+
 
 其中HMM关注Decoding问题，而Kalman filter和Particle filter更关注Filtering问题。
 
 #### 4.2.2 求Inference问题的方法
 根据后验概率是否能写成解析形式，可以把推断分成精确性推断和近似推断。近似推断又可以分为确定性近似推断(e.g., 变分推理)和随机近似推断(e.g., Monte Carlo采样)。
 
-### 4.3 Evaluation问题
-Evaluation问题即在给定参数**θ**的情况下求似然函数P(X|**θ**)。
+
 
 
 ## 五、参考资料
-1. [https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
+1. Bishop C M . Pattern Recognition and Machine Learning (Information Science and Statistics)[M]. Springer-Verlag New York, Inc. 2006.(13章)
+2. [https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
 
