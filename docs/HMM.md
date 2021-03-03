@@ -4,7 +4,7 @@
 [README.md](../README.md)中介绍了HMM与其它两个模型之间的区别与联系。HMM与其它两个模型最大的区别在于其状态空间是离散的，因此HMM的状态转移概率可以用
 一个矩阵A表示，其中a<sub>ij</sub> = P(Zt=q<sub>j</sub> | Zt=q<sub>i</sub>)，该矩阵称为***状态转移矩阵***(Transition Matrix)，满足每一行的和为1。HMM对观测空间
 的取值离散或连续没有规定，这里假设它也是离散的，可以用矩阵B表示观测概率，b<sub>ij</sub> = P(Xt=v<sub>j</sub>|Zt=q<sub>i</sub>)，称为***发射矩阵***(Emission Matrix)，
-发射矩阵同样满足每行和为1。再加上Z<sub>1</sub>系统状态的初始分布π，称λ = (π, A, B)为HMM模型的参数。HMM是一种产生式模型、无监督学习模型，是RNN之前人们最常用来做NLP任务的模型。
+发射矩阵同样满足每行和为1。再加上Z<sub>1</sub>系统状态的初始分布π，称λ = (π, A, B)为HMM模型的参数。HMM是一种产生式模型，是RNN之前人们最常用来做NLP任务的模型。
 ## 二、HMM关注的问题
 
 ### 2.1 Evaluation 
@@ -32,10 +32,11 @@ Backward算法的递归形式如下所示，它是从动态系统的终止值开
 
 ### 2.2 Learning
 
+HMM的学习问题根据训练数据是X还是(X, Z)可以分为非监督学习和监督学习两类，由于监督学习过于简单，这里不做讨论。非监督学习即求：
+
 λ<sub>MLE</sub> = argmax P(X|λ)
 
-模型中含有隐变量，用EM算法求解(在HMM中又称为Baum-Welch算法)。由于只有观测变量，没有隐变量作为标签，HMM的learning problem是一个无监督学习问题。
-
+模型中含有隐变量，用EM算法求解(在HMM中又称为Baum-Welch算法)。
 
 ### 2.3 Decoding
 
