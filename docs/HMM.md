@@ -53,3 +53,4 @@ Decoding问题采用Viterbi算法求解，Viterbi算法是一种求最短路径�
 1. Bishop C M . Pattern Recognition and Machine Learning (Information Science and Statistics)[M]. Springer-Verlag New York, Inc. 2006.(13章)
 2. [https://zhuanlan.zhihu.com/p/98397735](https://zhuanlan.zhihu.com/p/98397735)
 3. [https://www.cs.sjsu.edu/~stamp/RUA/HMM.pdf](https://www.cs.sjsu.edu/~stamp/RUA/HMM.pdf)
+4. [https://www.cnblogs.com/yifanrensheng/p/12684732.html](https://www.cnblogs.com/yifanrensheng/p/12684732.html)

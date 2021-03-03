@@ -5,8 +5,7 @@
 而完全贝叶斯(full-bayesian)则把学习问题看成一个积分问题，用MCMC等数值积分算法进行参数估计。
 
 贝叶斯学派最大的成果就是概率图模型，包括贝叶斯网络(Bayesian network)和马尔科夫网络(Markov network)。而在贝叶斯网络中加入时间序列，就是动态模型(Dynamic model)。
-动态模型是处理***序列化***数据的模型，比如声音、文本、DNA等。
-这里介绍三种动态模型，包括:
+动态模型是处理***序列化***数据的模型，比如声音、文本、DNA等。这里介绍三种动态模型，包括:
 
 1. [HMM(Hidden Markov Model)](docs/HMM.md)
 2. [Linear Dynamic system (Kalman filter)](docs/Kalman_filter.md)

@@ -148,11 +148,71 @@ class hmm:
             print(road)
             return road
 
-    def Baum_Welch(self):
-        """ 已知观测，求参数最大似然估计(Learning problem) """
+    def Baum_Welch(self, criterion=0.01):
+        """ 已知观测，求模型参数最大似然估计(Learning problem) """
         if self.X:
-            ...
+            state_num = len(self.A[0])
+            observe_num = len(self.B[0])
+            T = len(self.X)
+            pi_init = [1 / state_num for _ in range(state_num)]
+            A_init = [[1 / state_num for _ in range(state_num)] for j in range(state_num)]
+            B_init = [[1 / observe_num for _ in range(observe_num)] for j in range(state_num)]
+            self.A = A_init.copy()
+            self.B = B_init.copy()
+            self.pi = pi_init.copy()
+            old_likelihood = np.inf
+            while True:
+                new_likelihood = self.forward_algorithm()
+                print("new_likelihood = ", new_likelihood)
+                if abs(old_likelihood - new_likelihood) < criterion:
+                    break
+                old_likelihood = new_likelihood
+                alpha_lst = self.forward_algorithm(returnAlpha=True)
+                beta_lst = self.backward_algorithm(returnBeta=True)
+                gama_lst = []
+                for t in range(T):
+                    gama = [beta_lst[t][i] * alpha_lst[t][i] for i in range(state_num)]
+                    normalize_factor = np.sum(gama)
+                    gama_lst.append([gama[i] / normalize_factor for i in range(state_num)])
 
+                ita_lst = [[[0 for i in range(state_num)] for j in range(state_num)] for t in range(T - 1)]
+                for t in range(T - 1):
+                    sum_ = 0
+                    for i in range(state_num):
+                        for j in range(state_num):
+                            ita_lst[t][i][j] = alpha_lst[t][i] * self.A[i][j] * self.B[j][self.X[t+1]] * beta_lst[t + 1][j]
+                            sum_ += ita_lst[t][i][j]
+                    for i in range(state_num):
+                        for j in range(state_num):
+                            ita_lst[t][i][j] /= sum_
+                # update parameters
+                # pi
+                self.pi = gama_lst[0].copy()
+                # A
+                for i in range(state_num):
+                    denominator = 0
+                    for t in range(T - 1):
+                        denominator += gama_lst[t][i]
+
+                    for j in range(state_num):
+                        sum_ = 0
+                        for t in range(T - 1):
+                            sum_ += ita_lst[t][i][j]
+                        self.A[i][j] = sum_ / denominator
+                # B
+                for i in range(state_num):
+                    denominator = 0
+                    for t in range(T):
+                        denominator += gama_lst[t][i]
+                    numerator = 0
+                    for j in range(observe_num):
+                        for t in range(T):
+                            if self.X[t] == j:
+                                numerator += gama_lst[t][i]
+                        self.B[i][j] = numerator / denominator
+            print("init_prob = ", self.pi)
+            print("A = ", self.A)
+            print("B = ", self.B)
 
     def filtering(self):
         """ 求P(Zt|X1:t)，可以用前向算法解决 """
@@ -211,7 +271,7 @@ if __name__ == "__main__":
     A = [[0.5, 0.2, 0.3], [0.3, 0.5, 0.2], [0.2, 0.3, 0.5]]
     B = [[0.5, 0.5], [0.4, 0.6], [0.7, 0.3]]
     pi = [0.2, 0.4, 0.4]
-    X = [0, 1, 0, 1]
+    X = [0, 1, 0, 1, 1, 1, 0, 0, 1, 1]
     obj = hmm(A, B, pi, X)
     obj.forward_algorithm()
     obj.backward_algorithm()
@@ -220,6 +280,8 @@ if __name__ == "__main__":
     obj.smoothing()
     obj.prediction(option="state")
     obj.prediction(option="data")
+    obj.Baum_Welch(0.05)
+
 
 
 
