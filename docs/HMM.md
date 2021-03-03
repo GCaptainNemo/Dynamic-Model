@@ -46,7 +46,7 @@ Decoding问题采用Viterbi算法求解，Viterbi算法是一种求最短路径�
 ***<u>Z</u>*** = argmax P(Z<sub>1</sub>, Z<sub>2</sub>, ... ,Z<sub>t</sub>|X<sub>1</sub>, X<sub>2</sub>, ... ,X<sub>t</sub>, λ)问题可以看成从N<sup>t</sup>条路径中选出一条概率最大(最短的)路径。
 
 ### 2.4 补充
-除了以上问题之外，HMM还可以求解Filtering问题、Smoothing问题和Prediction问题，这里不在赘述。
+除了以上问题之外，HMM还可以求解Filtering问题、Smoothing问题和Prediction问题，这里不做赘述。
 
 
 
