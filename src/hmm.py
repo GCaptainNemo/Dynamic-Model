@@ -150,7 +150,9 @@ class hmm:
 
     def Baum_Welch(self):
         """ 已知观测，求参数最大似然估计(Learning problem) """
-        ...
+        if self.X:
+            ...
+
 
     def filtering(self):
         """ 求P(Zt|X1:t)，可以用前向算法解决 """
@@ -203,6 +205,7 @@ class hmm:
                 predict_data_lst.append(np.argmax(predict_prob))
             print("predict_data_lst = ", predict_data_lst)
             return predict_data_lst
+
 
 if __name__ == "__main__":
     A = [[0.5, 0.2, 0.3], [0.3, 0.5, 0.2], [0.2, 0.3, 0.5]]
