@@ -55,7 +55,7 @@ N(X<sub>t</sub> | CZ<sub>t</sub>, R)
 
 ***step 1. 预测(prediction)***
 
-![prediction step](../resources/linear_dynamic_system/kalman_filter_prediction_step.jpg)
+<p align="center"><img src=../resources/linear_dynamic_system/kalman_filter_prediction_step.jpg width=50%></p>
 
 由如上关系可得，预测步参数更新公式为:
 
